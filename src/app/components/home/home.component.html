@@ -1,0 +1,97 @@
+<!-- main Slider -->
+ <section >
+    <div class="row g-0 my-3">
+        <div class="col-md-8">
+
+            <owl-carousel-o [options]="mainSliderOption">
+                <ng-template carouselSlide><img class="w-100" height="400" src="./assets/images/main-slider-1.jpeg" alt="">
+                </ng-template>  
+               
+                <ng-template carouselSlide><img class="w-100" height="400" src="./assets/images/main-slider-2.jpeg" alt="">
+                </ng-template>  
+                <ng-template carouselSlide><img class="w-100" height="400" src="./assets/images/main-slider-3.jpeg" alt="">
+                </ng-template> 
+              </owl-carousel-o>
+        </div>
+        
+        <div class="col-md-4">
+            <img class="w-100" height="200" src="./assets/images/main-slider-2.jpeg" alt="">
+            <img class="w-100 " height="200" src="./assets/images/main-slider-3.jpeg" alt="">
+        </div>
+    </div>
+ </section>
+
+<!-- Catigries -->
+<section class="p-3 w-75 mx-auto cursor-pointer">
+  
+    <owl-carousel-o [options]="categoriesSliderOptions">
+  
+      <ng-container *ngFor="let item of catigories">
+        <ng-template carouselSlide >
+            <div>
+                <img [src]="item.image" height="250" class="w-100" [alt]="item.name">
+                <h3 class="h5">{{item.name}}</h3>
+           
+           
+            </div>
+
+
+        </ng-template>
+      </ng-container>
+  
+    </owl-carousel-o>
+  
+</section>
+
+
+
+<!-- Products -->
+<section class=" p-3">
+    <h2>Popular Products </h2>
+
+    <!-- Serarch Input  -->
+    <input [(ngModel)]="searchTerm" type="search" placeholder="Search ...." class="my-3 form-control mx-auto w-50">
+
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-2" *ngFor="let product of products | search: searchTerm | paginate: { id: 'productsPagination',
+        itemsPerPage: pageSize,
+        currentPage: currentPage,
+        totalItems: total }">
+            <div class="product p-2">
+               <div class="p-2 cursor-pointer" [routerLink]="['/details',product._id]">
+                <img [src]="product.imageCover" class="w-100" [alt]="product.title">
+                <h3 class="h6">{{product.category.name}}</h3>
+                <h4 class="h6">{{product.title | textLimit:2}}</h4>
+                
+                <div class="d-flex align-items-center justify-content-between">
+                    <span>{{product.price | currency : " EGP "}}</span>
+                    <div>
+                        <i class="fas fa-star rating-color"></i>
+                    <span class="text-muted">{{product.ratingsAverage}}</span>
+                    </div>
+                </div>
+               </div>
+                <button (click)="addCart(product._id)" class="btn-main w-100">Add Product</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="d-flex justify-content-center pt-3">
+        <pagination-controls  id="productsPagination"
+                      (pageChange)="pageChanged($event)"
+                      (pageBoundsCorrection)="pageChanged($event)"
+                      [maxSize]="9"
+                      [directionLinks]="true"
+                      [autoHide]="true"
+                      [responsive]="true"
+                      previousLabel="Previous"
+                      nextLabel="Next"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page">
+</pagination-controls>
+    </div>
+
+</section>
