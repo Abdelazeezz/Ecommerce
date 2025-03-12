@@ -1,5 +1,5 @@
 import { ForgotpasswordComponent } from './setting/forgotpassword/forgotpassword.component';
-import { Component, NgModule } from '@angular/core';
+import {  NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BlankLayoutComponent } from './components/blank-layout/blank-layout.component';
 import { HomeComponent } from './components/home/home.component';

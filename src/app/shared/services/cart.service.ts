@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class CartService {
   constructor(private _HttpClient: HttpClient) {}
 
-  cartNumber: BehaviorSubject<number> = new BehaviorSubject(0);
+  cartNumber: WritableSignal<number> = signal(0);
 
   addToCart(productId: string): Observable<any> {
     return this._HttpClient.post(
@@ -18,31 +19,31 @@ export class CartService {
   }
 
   getUserCart(): Observable<any> {
-    return this._HttpClient.get(`https://ecommerce.routemisr.com/api/v1/cart`);
+    return this._HttpClient.get(`${environment.baseUrl}/api/v1/cart`);
   }
 
   removeItem(productId: string): Observable<any> {
     return this._HttpClient.delete(
-      `https://ecommerce.routemisr.com/api/v1/cart/${productId}`
+      `${environment.baseUrl}/api/v1/cart/${productId}`
     );
   }
   updateCartProduct(productId: string, newCount: number): Observable<any> {
     return this._HttpClient.put(
-      `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
+      `${environment.baseUrl}/api/v1/cart/${productId}`,
       { count: newCount }
     );
   }
 
   checkOut(cartId: string, userData: object): Observable<any> {
     return this._HttpClient.post(
-      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:4200`,
+      `${environment.baseUrl}/api/v1/orders/checkout-session/${cartId}?url=http://localhost:4200`,
       { shippingAddress: userData }
     );
   }
 
   clearCartitems(): Observable<any> {
     return this._HttpClient.delete(
-      `https://ecommerce.routemisr.com/api/v1/cart`
+      `${environment.baseUrl}/api/v1/cart`
     );
   }
 }

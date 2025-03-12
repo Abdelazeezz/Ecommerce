@@ -1,1 +1,27 @@
-<p>categories works!</p>
+<!-- Catigries -->
+ <h1>Popular Categories</h1>
+<section class="p-3 w-75 mx-auto cursor-pointer">
+  
+    <owl-carousel-o [options]="categoriesSliderOptions">
+  
+      
+        @for (item of catigories(); track $index) {
+
+            <ng-template carouselSlide >
+                <div>
+                    <img [src]="item.image" height="250" class="w-100" [alt]="item.name">
+                    <h3 class="h5">{{item.name}}</h3>
+               
+               
+                </div>
+    
+    
+            </ng-template>
+        }
+     
+
+  
+    </owl-carousel-o>
+  
+</section>
+

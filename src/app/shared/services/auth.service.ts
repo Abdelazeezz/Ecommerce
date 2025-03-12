@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
+import {  environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -28,14 +29,14 @@ export class AuthService {
 
   setRegister(userData: object): Observable<any> {
     return this._HttpClient.post(
-      `https://ecommerce.routemisr.com/api/v1/auth/signup`,
+      `${environment.baseUrl}/api/v1/auth/signup`,
       userData
     );
   }
 
   setLogin(userData: object): Observable<any> {
     return this._HttpClient.post(
-      `https://ecommerce.routemisr.com/api/v1/auth/signin`,
+      `${environment.baseUrl}/api/v1/auth/signin`,
       userData
     );
   }

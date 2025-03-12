@@ -5,7 +5,6 @@
 
     </div>
 <p class="text-main">Total Price : {{cartDetails.totalCartPrice |currency:' EGP '}} </p>
-<!-- <p class="h2 text-center my-3" *ngIf="cartDetails == 0">Your Cart is Empty</p> -->
 <div class="row p-2" >
 @for (item of cartDetails.products; track $index) {
 
@@ -35,6 +34,9 @@
             
         </div>
     </div>
+
+}@empty {
+<p class="h2 text-center my-3" >Your Cart is Empty</p>
 
 }
   

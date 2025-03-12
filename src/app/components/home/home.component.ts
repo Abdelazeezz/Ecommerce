@@ -1,9 +1,12 @@
 import { Product } from './../../shared/interfaces/product';
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import { ICategory } from 'src/app/shared/interfaces/icategory';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { EcomdataService } from 'src/app/shared/services/ecomdata.service';
 
@@ -13,11 +16,19 @@ import { EcomdataService } from 'src/app/shared/services/ecomdata.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit,OnDestroy {
+
   constructor(private _EcomdataService:EcomdataService,private _CartService:CartService,private _ToastrService:ToastrService){}
-products:Product[]=[];
-catigories:any[]=[];
+ getProductSubscipe! :Subscription;
+ private readonly _spinner = inject(NgxSpinnerService)
+
+// products:Product[]=[];
+products:WritableSignal<Product[]> =signal([]);
+// catigories:ICategory[]=[];
+catigories:WritableSignal<ICategory[]> = signal([]);
+
 searchTerm:string ='';
+
 
 pageSize:number =0
 currentPage:number =1
@@ -30,9 +41,9 @@ categoriesSliderOptions: OwlOptions = {
   pullDrag: false,
   dots: true,
   autoplay:true,
-  autoplayTimeout:7000,
-  autoplaySpeed:1000,
-  navSpeed: 700,
+  autoplayTimeout:500,
+  autoplaySpeed:500,
+  navSpeed: 500,
   navText: ['', ''],
   responsive: {
     0: {
@@ -57,10 +68,10 @@ mainSliderOption: OwlOptions = {
   pullDrag: false,
   dots: true,
   autoplay:true,
-  autoplayTimeout:7000,
-  autoplaySpeed:1000,
+  autoplayTimeout:500,
+  autoplaySpeed:500,
   items:1,
-  navSpeed: 700,
+  navSpeed: 500,
   navText: ['', ''],
  
   nav: true
@@ -70,13 +81,16 @@ mainSliderOption: OwlOptions = {
 
 
   ngOnInit(): void {
-    this._EcomdataService.getAllProduct().subscribe({
+    this._spinner.show("loading");
+    this.getProductSubscipe = this._EcomdataService.getAllProduct().subscribe({
       next:(response)=>{
         // console.log(response);
-        this.products=response.data
+        this.products.set(response.data);
         this.pageSize = response.metadata.limit;
         this.currentPage = response.metadata.currentPage;
         this.total = response.results;
+    this._spinner.hide("loading");
+
       },
       error(err:HttpErrorResponse) {
         console.log(err);
@@ -87,7 +101,9 @@ mainSliderOption: OwlOptions = {
 
     this._EcomdataService.getCatigories().subscribe({
       next:(response)=>{
-        this.catigories= response.data
+        this.catigories.set(response.data) ;
+        // console.log( response.data);
+        
 
       },
       error(err:HttpErrorResponse) {
@@ -101,7 +117,7 @@ mainSliderOption: OwlOptions = {
     this._CartService.addToCart(id).subscribe({
       next:(response)=>{
         // console.log(response);
-        this._CartService.cartNumber.next(response.numOfCartItems)
+        this._CartService.cartNumber.set(response.numOfCartItems)
         this._ToastrService.success(response.message)
         
       },
@@ -130,5 +146,7 @@ mainSliderOption: OwlOptions = {
 
   }
 
-
+ngOnDestroy(): void {
+  this.getProductSubscipe?.unsubscribe();
+}
 }

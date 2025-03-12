@@ -26,7 +26,7 @@
   
     <owl-carousel-o [options]="categoriesSliderOptions">
   
-      <ng-container *ngFor="let item of catigories">
+      <ng-container *ngFor="let item of catigories()">
         <ng-template carouselSlide >
             <div>
                 <img [src]="item.image" height="250" class="w-100" [alt]="item.name">
@@ -44,7 +44,6 @@
 </section>
 
 
-
 <!-- Products -->
 <section class=" p-3">
     <h2>Popular Products </h2>
@@ -54,27 +53,32 @@
 
 
     <div class="row g-4 justify-content-center">
-        <div class="col-md-2" *ngFor="let product of products | search: searchTerm | paginate: { id: 'productsPagination',
+        @for (product of products()| search: searchTerm | paginate: { id: 'productsPagination',
         itemsPerPage: pageSize,
         currentPage: currentPage,
-        totalItems: total }">
-            <div class="product p-2">
-               <div class="p-2 cursor-pointer" [routerLink]="['/details',product._id]">
-                <img [src]="product.imageCover" class="w-100" [alt]="product.title">
-                <h3 class="h6">{{product.category.name}}</h3>
-                <h4 class="h6">{{product.title | textLimit:2}}</h4>
-                
-                <div class="d-flex align-items-center justify-content-between">
-                    <span>{{product.price | currency : " EGP "}}</span>
-                    <div>
-                        <i class="fas fa-star rating-color"></i>
-                    <span class="text-muted">{{product.ratingsAverage}}</span>
-                    </div>
-                </div>
-               </div>
-                <button (click)="addCart(product._id)" class="btn-main w-100">Add Product</button>
+        totalItems: total }; track $index) {
+
+<div class="col-md-2">
+    <div class="product p-2">
+       <div class="p-2 cursor-pointer" [routerLink]="['/details',product._id]">
+        <img [src]="product.imageCover" class="w-100" [alt]="product.title">
+        <h3 class="h6">{{product.category.name}}</h3>
+        <h4 class="h6">{{product.title | textLimit:2}}</h4>
+        
+        <div class="d-flex align-items-center justify-content-between">
+            <span>{{product.price | currency : " EGP "}}</span>
+            <div>
+                <i class="fas fa-star rating-color"></i>
+            <span class="text-muted">{{product.ratingsAverage}}</span>
             </div>
         </div>
+       </div>
+        <button (click)="addCart(product._id)" class="btn-main w-100">Add Product</button>
+    </div>
+</div>
+
+        }
+     
     </div>
 
 

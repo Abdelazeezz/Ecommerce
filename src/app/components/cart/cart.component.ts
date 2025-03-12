@@ -32,7 +32,7 @@ Removeproduct(Id:string):void{
   this._CartService.removeItem(Id).subscribe({
     next:(response)=>{
       //console.log(response)
-      this._CartService.cartNumber.next(response.numOfCartItems)
+      this._CartService.cartNumber.set(response.numOfCartItems)
       this.cartDetails= response.data
     },
     error:(err)=>{
@@ -68,7 +68,7 @@ clearcart():void{
     next:(response)=>{
       console.log(response);
       if(response.message == "success"){
-        this._CartService.cartNumber.next(0)
+        this._CartService.cartNumber.set(0)
         this.cartDetails = 0
 
       }

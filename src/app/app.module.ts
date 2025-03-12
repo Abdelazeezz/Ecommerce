@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,6 +30,8 @@ import { AllordersComponent } from './components/allorders/allorders.component';
 import { MyhttpInterceptor } from './myhttp.interceptor';
 import { SlicePipe } from './slice.pipe';
 import {NgxPaginationModule} from 'ngx-pagination'
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadingInterceptor } from './loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -51,11 +54,13 @@ import {NgxPaginationModule} from 'ngx-pagination'
     SearchPipe,
     CheckoutComponent,
     AllordersComponent,
-    SlicePipe,
+    SlicePipe
+   
    
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -64,9 +69,11 @@ import {NgxPaginationModule} from 'ngx-pagination'
     FormsModule,
     ToastrModule.forRoot(),
     NgxPaginationModule,
+     NgxSpinnerModule
   ],
   providers: [
-    {provide:HTTP_INTERCEPTORS,useClass:MyhttpInterceptor,multi:true}
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: MyhttpInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

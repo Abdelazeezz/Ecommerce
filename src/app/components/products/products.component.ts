@@ -40,7 +40,7 @@ export class ProductsComponent {
     this._CartService.addToCart(id).subscribe({
       next:(response)=>{
         // console.log(response);
-        this._CartService.cartNumber.next(response.numOfCartItems)
+        this._CartService.cartNumber.set(response.numOfCartItems)
         this._ToastrService.success(response.message)
         
       },
